@@ -1,0 +1,29 @@
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/DefWithParentheses:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Style/TrivialAccessors:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/ClassLength:
+  Max: 150
+Layout/IndentationWidth:
+  Width: 2
+Layout/LineLength:
+  Max: 200
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+Metrics/AbcSize:
+  Max: 30
+Metrics/MethodLength:
+  Max: 30
+RaiseArgs:
+  EnforcedStyle: compact
