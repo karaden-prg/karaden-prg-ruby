@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Ruby library for the Karaden API."
   spec.homepage = "https://github.com/karaden-prg/karaden-prg-ruby"
+  spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
