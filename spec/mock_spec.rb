@@ -24,6 +24,7 @@ RSpec.describe 'Mock' do
     expect(tags.count).to eq 1
     expect(tags[0]).to eq 'string'
     expect(message.shorten?).to eq true
+    expect(message.shorten_clicked?).to eq true
     expect(message.result).to eq 'done'
     expect(message.status).to eq 'done'
     expect(message.sent_result).to eq 'none'
@@ -71,6 +72,7 @@ RSpec.describe 'Mock' do
     expect(tags.count).to eq 1
     expect(tags[0]).to eq 'string'
     expect(message.shorten?).to eq true
+    expect(message.shorten_clicked?).to eq true
     expect(message.result).to eq 'done'
     expect(message.status).to eq 'done'
     expect(message.sent_result).to eq 'none'
@@ -103,6 +105,7 @@ RSpec.describe 'Mock' do
     expect(tags.count).to eq 1
     expect(tags[0]).to eq 'string'
     expect(message.shorten?).to eq true
+    expect(message.shorten_clicked?).to eq true
     expect(message.result).to eq 'done'
     expect(message.status).to eq 'done'
     expect(message.sent_result).to eq 'none'
@@ -135,6 +138,7 @@ RSpec.describe 'Mock' do
     expect(tags.count).to eq 1
     expect(tags[0]).to eq 'string'
     expect(message.shorten?).to eq true
+    expect(message.shorten_clicked?).to eq true
     expect(message.result).to eq 'done'
     expect(message.status).to eq 'done'
     expect(message.sent_result).to eq 'none'
