@@ -27,6 +27,10 @@ module Karaden
         property('is_shorten')
       end
 
+      def shorten_clicked?()
+        property('is_shorten_clicked')
+      end
+
       def result()
         property('result')
       end
