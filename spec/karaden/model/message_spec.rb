@@ -224,6 +224,22 @@ RSpec.describe Karaden::Model::Message do
     expect(message.property('status')).to eq value
   end
 
+  it 'APIバージョン20230101ではshorten_clicked?はnilが出力される' do
+    # APIバージョン2023-01-01ではnilが返ってくる
+    value = nil
+    message = Karaden::Model::Message.new
+    message.set_property('is_shorten_clicked', value)
+    expect(message.shorten_clicked?).to be_nil
+  end
+
+  it 'APIバージョン20231201ではshorten_clicked?はbooleanが出力される' do
+    # APIバージョン2023-12-01ではbooleanが返ってくる
+    value = true
+    message = Karaden::Model::Message.new
+    message.set_property('is_shorten_clicked', value)
+    expect(message.shorten_clicked?).to be_truthy
+  end
+
   it 'resultを出力できる' do
     value = 'none'
     message = Karaden::Model::Message.new
