@@ -1,8 +1,8 @@
 module Karaden
   class Config
-    VERSION = '1.1.0'.freeze
+    VERSION = '1.2.0'.freeze
     DEFAULT_API_BASE = 'https://prg.karaden.jp/api'.freeze
-    DEFALUT_API_VERSION = '2023-12-01'.freeze
+    DEFALUT_API_VERSION = '2024-03-01'.freeze
 
     @@http_client = nil
     @@logger = nil
