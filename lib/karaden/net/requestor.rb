@@ -3,7 +3,7 @@ module Karaden
     class Requestor < RequestorInterface
       DEFAULT_USER_AGENT = 'Karaden/Ruby/'.freeze
 
-      def send(method, path, content_type = nil, params = nil, data = nil, request_options = nil)
+      def send(method, path, content_type = nil, params = nil, data = nil, request_options = nil, is_no_contents = false)
         request_options = Karaden::RequestOptions.new if request_options.nil?
         options = Karaden::Config.as_request_options.merge(request_options).validate
         headers = {
@@ -23,7 +23,7 @@ module Karaden
         data = URI.encode_www_form(data) unless data.nil?
         response = http.send_request(method, uri.request_uri, data, headers)
 
-        Karaden::Net::Response.new(response, options)
+        !is_no_contents ? Karaden::Net::Response.new(response, options) : Karaden::Net::NoContentsResponse.new(response, options)
       end
 
       protected

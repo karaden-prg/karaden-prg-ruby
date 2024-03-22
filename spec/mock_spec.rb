@@ -151,4 +151,57 @@ RSpec.describe 'Mock' do
     expect(message.created_at).to eq datetime
     expect(message.updated_at).to eq datetime
   end
+
+  it '一括送信用のアップロード先URL取得' do
+    datetime = Time.parse('2020-01-31T23:59:59+09:00')
+
+    request_options = Karaden::TestHelper.default_request_options_builder.build
+    bulk_file = Karaden::Model::BulkFile.create(request_options)
+    expect(bulk_file.id).to eq '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+    expect(bulk_file.object).to eq 'bulk_file'
+    expect(bulk_file.url).to eq 'https://example.com'
+    expect(bulk_file.created_at).to eq datetime
+    expect(bulk_file.expires_at).to eq datetime
+  end
+
+  it '一括送信' do
+    datetime = Time.parse('2020-01-31T23:59:59+09:00')
+    params = Karaden::Param::Message::Bulk::BulkMessageCreateParams.new_builder
+    .with_bulk_file_id('c439f89c-1ea3-7073-7021-1f127a850437')
+    .build
+
+    request_options = Karaden::TestHelper.default_request_options_builder.build
+    bulk_message = Karaden::Model::BulkMessage.create(params, request_options)
+    expect(bulk_message.id).to eq '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+    expect(bulk_message.object).to eq 'bulk_message'
+    expect(bulk_message.status).to eq 'done'
+    expect(bulk_message.error).to be_an_instance_of Karaden::Model::Error
+    expect(bulk_message.created_at).to eq datetime
+    expect(bulk_message.updated_at).to eq datetime
+  end
+
+  it '一括送信状態取得' do
+    datetime = Time.parse('2020-01-31T23:59:59+09:00')
+    params = Karaden::Param::Message::Bulk::BulkMessageShowParams.new_builder
+      .with_id('82bdf9de-a532-4bf5-86bc-c9a1366e5f4a')
+      .build
+
+    request_options = Karaden::TestHelper.default_request_options_builder.build
+    bulk_message = Karaden::Model::BulkMessage.show(params, request_options)
+    expect(bulk_message.id).to eq '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+    expect(bulk_message.object).to eq 'bulk_message'
+    expect(bulk_message.status).to eq 'done'
+    expect(bulk_message.created_at).to eq datetime
+    expect(bulk_message.updated_at).to eq datetime
+  end
+
+  it '一括送信結果取得' do
+    params = Karaden::Param::Message::Bulk::BulkMessageListMessageParams.new_builder
+      .with_id('82bdf9de-a532-4bf5-86bc-c9a1366e5f4a')
+      .build
+
+    request_options = Karaden::TestHelper.default_request_options_builder.build
+    output = Karaden::Model::BulkMessage.list_message(params, request_options)
+    expect(output).to eq nil
+  end
 end

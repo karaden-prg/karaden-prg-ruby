@@ -140,10 +140,12 @@ module Karaden
 
     def with_connection_timeout(connection_timeout)
       @request_options.connection_timeout = connection_timeout
+      self
     end
 
     def with_read_timeout(read_timeout)
       @request_options.read_timeout = read_timeout
+      self
     end
 
     def build

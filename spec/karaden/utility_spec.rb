@@ -1,4 +1,14 @@
+require 'tempfile'
+require 'webmock/rspec'
+
 RSpec.describe Karaden::Utility do
+  before do
+    WebMock.enable!
+  end
+  after do
+    WebMock.disable!
+  end
+
   let(:primitive_value_provider) do
     ['string', '', 123, 0, true, false, nil]
   end
@@ -71,5 +81,71 @@ RSpec.describe Karaden::Utility do
       expect(object.property('test')[0].is_a?(clazz)).to eq true
       expect(object.property('test')[0].property('test')).to eq item['test']
     end
+  end
+
+  it '指定のURLにfileパスのファイルをPUTメソッドでリクエストする' do
+    file = Tempfile.new
+    filename = file.path
+    file.close
+
+    signed_url = 'https://example.com/'
+
+    stub_request(:any, signed_url).to_return do |request|
+      expect(request.method).to eq :put
+      expect(request.uri.omit(:port).to_s).to eq signed_url
+      { status: 200 }
+    end
+
+    Karaden::Utility.put_signed_url(signed_url, filename)
+  end
+
+  it 'レスポンスコードが200以外だとFileUploadFailedExceptionが返る' do
+    file = Tempfile.new
+    filename = file.path
+    file.close
+    signed_url = 'https://example.com/'
+
+    stub_request(:any, signed_url).to_return do |request|
+      expect(request.method).to eq :put
+      expect(request.uri.omit(:port).to_s).to eq signed_url
+      { status: 403 }
+    end
+
+    expect do
+      Karaden::Utility.put_signed_url(signed_url, filename)
+    end.to raise_error(Karaden::Exception::FileUploadFailedException)
+  end
+
+  it '例外が発生するとFileUploadFailedExceptionをリスローする' do
+    file = Tempfile.new
+    filename = file.path
+    file.close
+    signed_url = 'https://example.com/'
+
+    stub_request(:any, signed_url).to_return do
+      raise StandardError
+    end
+
+    expect do
+      Karaden::Utility.put_signed_url(signed_url, filename)
+    end.to raise_error(Karaden::Exception::FileUploadFailedException)
+  end
+
+  it 'Content-Typeを指定できる' do
+    file = Tempfile.new
+    filename = file.path
+    file.close
+
+    signed_url = 'https://example.com/'
+    content_type = 'text/csv'
+
+    stub_request(:any, signed_url).to_return do |request|
+      expect(request.method).to eq :put
+      expect(request.uri.omit(:port).to_s).to eq signed_url
+      expect(request.headers['Content-Type']).to eq content_type
+      { status: 200 }
+    end
+
+    Karaden::Utility.put_signed_url(signed_url, filename, content_type)
   end
 end
