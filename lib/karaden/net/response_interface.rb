@@ -9,6 +9,14 @@ module Karaden
         raise NotImplementedError
       end
 
+      def status_code()
+        raise NotImplementedError
+      end
+
+      def headers()
+        raise NotImplementedError
+      end
+
       def error?()
         raise NotImplementedError
       end

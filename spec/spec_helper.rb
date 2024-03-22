@@ -18,7 +18,7 @@ module Karaden
   class TestHelper
     API_BASE = 'http://localhost:4010'
     API_KEY = '123'
-    API_VERSION = '2023-12-01'
+    API_VERSION = '2024-03-01'
     TENANT_ID = '159bfd33-b9b7-f424-4755-c119b324591d'
 
     def self.default_request_options_builder

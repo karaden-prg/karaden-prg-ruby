@@ -15,6 +15,13 @@ module Karaden
 
         response.object
       end
+
+      def self.request_and_return_response_interface(method, path, content_type = nil, params = nil, data = nil, request_options = nil)
+        response = @@requestor.send(method, path, content_type, params, data, request_options, true)
+        raise response.error if response.error?
+
+        response
+      end
     end
   end
 end

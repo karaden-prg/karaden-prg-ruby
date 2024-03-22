@@ -1,6 +1,6 @@
 module Karaden
   module Net
-    class Response < ResponseInterface
+    class NoContentsResponse < ResponseInterface
       ERRORS = {
         Karaden::Exception::BadRequestException::STATUS_CODE => Karaden::Exception::BadRequestException,
         Karaden::Exception::UnauthorizedException::STATUS_CODE => Karaden::Exception::UnauthorizedException,
@@ -12,7 +12,8 @@ module Karaden
 
       def initialize(response, request_options)
         @error = nil
-        @object = nil
+        @status_code = nil
+        @headers = nil
         super()
         interpret(response, request_options)
       end
@@ -22,15 +23,15 @@ module Karaden
       end
 
       def object()
-        @object
+        raise NotImplementedError
       end
 
       def status_code()
-        raise NotImplementedError
+        @status_code
       end
 
       def headers()
-        raise NotImplementedError
+        @headers
       end
 
       def error?()
@@ -53,25 +54,25 @@ module Karaden
       end
 
       def interpret(response, request_options)
-        code = response.code.to_i
-        body = response.body
-        headers = response.response.each_header.to_h
-        contents = JSON.parse(response.body)
-        @object = Karaden::Utility.convert_to_karaden_object(contents, request_options)
-        if code < 200 || code >= 400
-          @error = if @object.is_a?(Karaden::Model::Error)
-                     handle_error(code, headers, body, @object)
+        @status_code = response.code.to_i
+        @headers = response.response.response.each_header.to_h
+        if @status_code >= 400
+          body = response.body
+          contents = JSON.parse(response.body)
+          object = Karaden::Utility.convert_to_karaden_object(contents, request_options)
+          @error = if object.is_a?(Karaden::Model::Error)
+                     handle_error(code, @headers, body, object)
                    else
                      Karaden::Exception::UnexpectedValueException.new
                    end
-          @error.code = code
-          @error.headers = headers
+          @error.code = @status_code
+          @error.headers = @headers
           @error.body = body
         end
       rescue StandardError => _e
         @error = Karaden::Exception::UnexpectedValueException.new
-        @error.code = code
-        @error.headers = headers
+        @error.code = @status_code
+        @error.headers = @headers
         @error.body = body
       end
     end
