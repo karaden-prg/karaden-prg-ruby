@@ -1,7 +1,7 @@
 module Karaden
   module Service
     class BulkMessageService
-      REGEX_PATTERN = /filename="([^"]+)"/.freeze
+      REGEX_PATTERN = /filename="([^"]+)"/
 
       def self.create(filename, request_options = nil)
         raise Karaden::Exception::FileNotFoundException unless File.file?(filename)
@@ -58,9 +58,9 @@ module Karaden
         true
       end
 
-      def self.check_bulk_message_status(retry_count, retry_interval, params, request_options)
+      def self.check_bulk_message_status(retry_count, _retry_interval, params, request_options)
         result = false
-        (0..retry_count).each do |count|
+        (0..retry_count).each do |_count|
           # sleep retry_interval if count.positive?
           bulk_message = Karaden::Model::BulkMessage.show(params, request_options)
           raise Exception::BulkMessageCreateFailedException if bulk_message.status == Karaden::Model::BulkMessage::STATUS_ERROR
@@ -73,9 +73,9 @@ module Karaden
         result
       end
 
-      def self.get_download_url(retry_count, retry_interval, params, request_options)
+      def self.get_download_url(retry_count, _retry_interval, params, request_options)
         result = nil
-        (0..retry_count).each do |count|
+        (0..retry_count).each do |_count|
           # sleep retry_interval if count.positive?
           output = Karaden::Model::BulkMessage.list_message(params, request_options)
           unless output.nil?

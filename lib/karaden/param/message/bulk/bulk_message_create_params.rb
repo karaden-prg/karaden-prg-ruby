@@ -76,4 +76,3 @@ module Karaden
     end
   end
 end
-
