@@ -1,0 +1,23 @@
+name: Publish Package to RubyGems
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  publish_package:
+    runs-on: ubuntu-latest
+    environment: prod
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.6'
+          bundler-cache: true
+
+      - uses: rubygems/release-gem@v1
+        with:
+          await-release: false
+          attestations: false

@@ -3,7 +3,7 @@ module Karaden
     class Requestor < RequestorInterface
       DEFAULT_USER_AGENT = 'Karaden/Ruby/'.freeze
 
-      def send(method, path, content_type = nil, params = nil, data = nil, request_options = nil, is_no_contents = false)
+      def send(method, path, content_type = nil, params = nil, data = nil, request_options = nil, is_no_contents: false)
         request_options = Karaden::RequestOptions.new if request_options.nil?
         options = Karaden::Config.as_request_options.merge(request_options).validate
         headers = {
@@ -11,7 +11,7 @@ module Karaden
           'Karaden-Client-User-Agent': build_client_user_agent,
           'Karaden-Version' => options.api_version,
           'Content-Type': content_type,
-          'Authorization': build_authorization(options),
+          'Authorization': build_authorization(options)
         }
 
         uri = URI.parse(build_http_url(path, params, options))

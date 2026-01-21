@@ -27,33 +27,20 @@ module Karaden
 
     def validate
       errors = Karaden::Model::KaradenObject.new
-      has_error = false
 
       messages = validate_api_base
-      unless messages.empty?
-        errors.set_property('api_base', messages)
-        has_error = true
-      end
+      errors.set_property('api_base', messages) unless messages.empty?
 
       messages = validate_api_key
-      unless messages.empty?
-        errors.set_property('api_key', messages)
-        has_error = true
-      end
+      errors.set_property('api_key', messages) unless messages.empty?
 
       messages = validate_api_version
-      unless messages.empty?
-        errors.set_property('api_version', messages)
-        has_error = true
-      end
+      errors.set_property('api_version', messages) unless messages.empty?
 
       messages = validate_tenant_id
-      unless messages.empty?
-        errors.set_property('tenant_id', messages)
-        has_error = true
-      end
+      errors.set_property('tenant_id', messages) unless messages.empty?
 
-      if has_error
+      unless errors.property_keys.filter { |key| !errors.property(key).nil? }.empty?
         e = Karaden::Exception::InvalidRequestOptionsException.new
         error = Karaden::Model::Error.new
         error.set_property('object', Karaden::Model::Error::OBJECT_NAME)
