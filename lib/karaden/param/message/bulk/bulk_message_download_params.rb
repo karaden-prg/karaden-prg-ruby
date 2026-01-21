@@ -22,33 +22,20 @@ module Karaden
 
           def validate
             errors = Karaden::Model::KaradenObject.new
-            has_error = false
 
             messages = validate_id
-            unless messages.empty?
-              errors.set_property('id', messages)
-              has_error = true
-            end
+            errors.set_property('id', messages) unless messages.empty?
 
             messages = validate_directory_path
-            unless messages.empty?
-              errors.set_property('directory_path', messages)
-              has_error = true
-            end
+            errors.set_property('directory_path', messages) unless messages.empty?
 
             messages = validate_max_retries
-            unless messages.empty?
-              errors.set_property('max_retries', messages)
-              has_error = true
-            end
+            errors.set_property('max_retries', messages) unless messages.empty?
 
             messages = validate_retry_interval
-            unless messages.empty?
-              errors.set_property('retry_interval', messages)
-              has_error = true
-            end
+            errors.set_property('retry_interval', messages) unless messages.empty?
 
-            if has_error
+            unless errors.property_keys.filter { |key| !errors.property(key).nil? }.empty?
               e = Karaden::Exception::InvalidParamsException.new
               error = Karaden::Model::Error.new
               error.set_property('object', Karaden::Model::Error::OBJECT_NAME)

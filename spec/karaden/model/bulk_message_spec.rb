@@ -9,7 +9,7 @@ RSpec.describe Karaden::Model::BulkMessage do
   end
 
   let(:location_provider) do
-    ['location', 'LOCATION']
+    %w[location LOCATION]
   end
 
   it '一括送信メッセージを作成できる' do

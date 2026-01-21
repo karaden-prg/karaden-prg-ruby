@@ -14,7 +14,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
       object: 'bulk_file',
       url: signed_url,
       created_at: '2023-12-01T15:00:00.0Z',
-      expires_at: '2023-12-01T15:00:00.0Z',
+      expires_at: '2023-12-01T15:00:00.0Z'
     }
     request_options = Karaden::TestHelper.default_request_options_builder.build
     bulk_file_uri = "#{request_options.base_uri}/messages/bulks/files"
@@ -29,7 +29,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
       object: 'bulk_message',
       status: 'processing',
       created_at: '2023-12-01T15:00:00.0Z',
-      updated_at: '2023-12-01T15:00:00.0Z',
+      updated_at: '2023-12-01T15:00:00.0Z'
     }
     bulk_message_uri = "#{request_options.base_uri}/messages/bulks"
     stub_request(:post, bulk_message_uri).to_return(
@@ -72,7 +72,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
 
   it 'ファイルがダウンロードできる' do
     Dir.mktmpdir do |dir|
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
       mock_location_url = "https://example.com/#{SecureRandom.uuid}"
       file_content = 'file content'
 
@@ -82,12 +82,12 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'done',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       bulk_message_list_message_uri = "#{request_options.base_uri}/messages/bulks/#{id}/messages"
@@ -127,7 +127,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
       mock_location_url = "https://example.com/#{SecureRandom.uuid}"
       with_query_param = "#{mock_location_url}?Key-Pair-Id=#{SecureRandom.uuid}"
 
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
       file_content = 'file content'
 
       request_options = Karaden::TestHelper.default_request_options_builder.build
@@ -136,12 +136,12 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'done',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       bulk_message_list_message_uri = "#{request_options.base_uri}/messages/bulks/#{id}/messages"
@@ -181,7 +181,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
 
   it 'bulk_messageのstatusがdone以外でリトライ回数を超過した場合はエラー' do
     Dir.mktmpdir do |dir|
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
 
       request_options = Karaden::TestHelper.default_request_options_builder.build
       bulk_message_response = {
@@ -189,12 +189,12 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'processing',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       params = Karaden::Param::Message::Bulk::BulkMessageDownloadParams.new_builder
@@ -212,7 +212,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
 
   it '結果取得APIが202を返しリトライ回数を超過した場合はエラー' do
     Dir.mktmpdir do |dir|
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
 
       request_options = Karaden::TestHelper.default_request_options_builder.build
       bulk_message_response = {
@@ -220,18 +220,18 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'done',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       bulk_message_list_message_uri = "#{request_options.base_uri}/messages/bulks/#{id}/messages"
       stub_request(:get, bulk_message_list_message_uri).to_return(
         body: '',
-        status: 202,
+        status: 202
       )
 
       params = Karaden::Param::Message::Bulk::BulkMessageDownloadParams.new_builder
@@ -249,7 +249,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
 
   it 'bulk_messageのstatusがerrorの場合はエラー' do
     Dir.mktmpdir do |dir|
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
 
       request_options = Karaden::TestHelper.default_request_options_builder.build
       bulk_message_response = {
@@ -257,12 +257,12 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'error',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       params = Karaden::Param::Message::Bulk::BulkMessageDownloadParams.new_builder
@@ -280,7 +280,7 @@ RSpec.describe Karaden::Service::BulkMessageService do
 
   it 'ファイルダウンロード処理にエラーが発生した場合は例外が飛ぶ' do
     Dir.mktmpdir do |dir|
-      id ='82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
+      id = '82bdf9de-a532-4bf5-86bc-c9a1366e5f4a'
 
       request_options = Karaden::TestHelper.default_request_options_builder.build
       bulk_message_response = {
@@ -288,12 +288,12 @@ RSpec.describe Karaden::Service::BulkMessageService do
         object: 'bulk_message',
         status: 'done',
         created_at: '2023-12-01T15:00:00.0Z',
-        updated_at: '2023-12-01T15:00:00.0Z',
+        updated_at: '2023-12-01T15:00:00.0Z'
       }
       bulk_message_show_uri = "#{request_options.base_uri}/messages/bulks/#{id}"
       stub_request(:get, bulk_message_show_uri).to_return(
         body: JSON.generate(bulk_message_response),
-        status: 200,
+        status: 200
       )
 
       bulk_message_list_message_uri = "#{request_options.base_uri}/messages/bulks/#{id}/messages"
